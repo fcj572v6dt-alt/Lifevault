@@ -1,0 +1,12 @@
+{
+  "name": "LifeVault",
+  "short_name": "LifeVault",
+  "description": "管理你的物品、文件、保固、訂閱與生活資產",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f6f8",
+  "theme_color": "#5968ff",
+  "orientation": "portrait",
+  "lang": "zh-Hant"
+}
