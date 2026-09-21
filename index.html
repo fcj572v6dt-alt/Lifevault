@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#5968ff">
+<link rel="manifest" href="./manifest.json">
+<title>LifeVault</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
+}
+
+body {
+    background: #f5f6f8;
+    color: #222;
+    padding-bottom: 80px;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+.app {
+    max-width: 600px;
+    margin: auto;
+}
+
+/* Header */
+
+.header {
+    background: white;
+    padding: 20px 18px 15px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid #eee;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.logo span {
+    color: #5968ff;
+}
+
+.header-btn {
+    background: #f0f1f5;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* Page */
+
+.page {
+    display: none;
+    padding: 20px 16px;
+}
+
+.page.active {
+    display: block;
+}
+
+.page-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.page-subtitle {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Welcome */
+
+.welcome {
+    background: linear-gradient(135deg, #5968ff, #7c6cff);
+    color: white;
+    border-radius: 22px;
+    padding: 24px;
+    margin-bottom: 18px;
+}
+
+.welcome h2 {
+    font-size: 23px;
+    margin-bottom: 8px;
+}
+
+.welcome p {
+    opacity: .85;
+    font-size: 14px;
+}
+
+/* Dashboard */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px 16px;
+    min-height: 125px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.04);
+}
+
+.card-icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.card-title {
+    font-weight: 700;
+}
+
+.card-count {
+    margin-top: 5px;
+    color: #888;
+    font-size: 13px;
+}
+
+/* Search */
+
+.search-box {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    outline: none;
+}
+
+.search-box button {
+    width: 48px;
+    border-radius: 14px;
+    background: #5968ff;
+    color: white;
+}
+
+/* Items */
+
+.item-list {
+    display: grid;
+    gap: 12px;
+}
+
+.item-card {
+    background: white;
+    border-radius: 18px;
+    padding: 17px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.04);
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.item-name {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.item-brand {
+    color: #888;
+    font-size: 13px;
+    margin-top: 3px;
+}
+
+.item-price {
+    font-weight: 700;
+}
+
+.item-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 12px;
+}
+
+.tag {
+    background: #f0f1f5;
+    padding: 5px 9px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #666;
+}
+
+.tag.warning {
+    background: #fff0d6;
+    color: #a96500;
+}
+
+.tag.danger {
+    background: #ffe0e0;
+    color: #c62828;
+}
+
+.item-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.small-btn {
+    flex: 1;
+    padding: 9px;
+    border-radius: 10px;
+    background: #f1f2f6;
+}
+
+.small-btn.primary {
+    background: #5968ff;
+    color: white;
+}
+
+/* Category */
+
+.category-list {
+    display: grid;
+    gap: 10px;
+}
+
+.category-item {
+    background: white;
+    padding: 17px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-left {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.category-icon {
+    font-size: 27px;
+}
+
+/* Empty */
+
+.empty {
+    text-align: center;
+    padding: 50px 20px;
+    color: #999;
+}
+
+.empty-icon {
+    font-size: 50px;
+    margin-bottom: 12px;
+}
+
+/* Bottom nav */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 600px;
+    margin: auto;
+    height: 68px;
+    background: rgba(255,255,255,.96);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-around;
+    z-index: 25;
+}
+
+.nav-btn {
+    flex: 1;
+    background: transparent;
+    color: #999;
+    font-size: 11px;
+}
+
+.nav-btn span {
+    display: block;
+    font-size: 21px;
+    margin-bottom: 2px;
+}
+
+.nav-btn.active {
+    color: #5968ff;
+}
+
+/* Floating button */
+
+.floating-btn {
+    position: fixed;
+    right: 20px;
+    bottom: 85px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #5968ff;
+    color: white;
+    font-size: 28px;
+    box-shadow: 0 8px 20px rgba(89,104,255,.35);
+    z-index: 30;
+}
+
+/* Modal */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-box {
+    background: white;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 25px 25px 0 0;
+    padding: 22px;
+}
+
+.modal-title {
+    font-size: 21px;
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    outline: none;
+    background: white;
+}
+
+.form-group textarea {
+    min-height: 90px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+}
+
+.cancel-btn {
+    background: #eee;
+}
+
+.save-btn {
+    background: #5968ff;
+    color: white;
+}
+
+/* Toast */
+
+.toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: .25s;
+    z-index: 200;
+}
+
+.toast.show {
+    opacity: 1;
+}
+
+@media (min-width: 601px) {
+    .modal {
+        align-items: center;
+    }
+
+    .modal-box {
+        border-radius: 22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+    <div class="header-top">
+        <div class="logo">Life<span>Vault</span></div>
+        <button class="header-btn" onclick="showPage('settings')">
+            ⚙️
+        </button>
+    </div>
+</header>
+
+
+<!-- 首頁 -->
+
+<section id="home" class="page active">
+
+    <div class="welcome">
+        <h2>管理你的人生資產</h2>
+        <p>物品、文件、保固、訂閱，一個地方全部整理。</p>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card" onclick="showPage('items')">
+            <div class="card-icon">📦</div>
+            <div class="card-title">我的物品</div>
+            <div class="card-count" id="itemCount">0 件</div>
+        </div>
+
+        <div class="dashboard-card" onclick="showPage('documents')">
+            <div class="card-icon">📄</div>
+            <div class="card-title">我的文件</div>
+            <div class="card-count">文件管理</div>
+        </div>
+
+        <div class="dashboard-card" onclick="showPage('warranty')">
+            <div class="card-icon">🧾</div>
+            <div class="card-title">保固</div>
+            <div class="card-count" id="warrantyCount">0 項</div>
+        </div>
+
+        <div class="dashboard-card" onclick="showPage('expiry')">
+            <div class="card-icon">🔔</div>
+            <div class="card-title">即將到期</div>
+            <div class="card-count" id="expiryCount">0 項</div>
+        </div>
+
+        <div class="dashboard-card" onclick="showPage('subscriptions')">
+            <div class="card-icon">💳</div>
+            <div class="card-title">我的訂閱</div>
+            <div class="card-count">管理扣款</div>
+        </div>
+
+        <div class="dashboard-card" onclick="showPage('repairs')">
+            <div class="card-icon">🔧</div>
+            <div class="card-title">維修紀錄</div>
+            <div class="card-count">維修歷史</div>
+        </div>
+
+        <div class="dashboard-card" onclick="showPage('expenses')">
+            <div class="card-icon">💰</div>
+            <div class="card-title">我的花費</div>
+            <div class="card-count" id="expenseCount">$0</div>
+        </div>
+
+        <div class="dashboard-card" onclick="showPage('family')">
+            <div class="card-icon">👨‍👩‍👧‍👦</div>
+            <div class="card-title">家庭</div>
+            <div class="card-count">家庭共享</div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- 我的物品 -->
+
+<section id="items" class="page">
+
+    <h1 class="page-title">我的物品</h1>
+    <p class="page-subtitle">管理你擁有的所有物品</p>
+
+    <div class="search-box">
+        <input
+            id="searchInput"
+            placeholder="搜尋物品、品牌、型號..."
+            oninput="renderItems()"
+        >
+        <button onclick="clearSearch()">×</button>
+    </div>
+
+    <div id="itemsList" class="item-list"></div>
+
+</section>
+
+
+<!-- 文件 -->
+
+<section id="documents" class="page">
+
+    <h1 class="page-title">我的文件</h1>
+    <p class="page-subtitle">重要文件集中管理</p>
+
+    <div class="category-list">
+
+        <div class="category-item">
+            <div class="category-left">
+                <div class="category-icon">🪪</div>
+                <div>身分證件</div>
+            </div>
+            <div>›</div>
+        </div>
+
+        <div class="category-item">
+            <div class="category-left">
+                <div class="category-icon">🏠</div>
+                <div>房屋文件</div>
+            </div>
+            <div>›</div>
+        </div>
+
+        <div class="category-item">
+            <div class="category-left">
+                <div class="category-icon">🚗</div>
+                <div>車輛文件</div>
+            </div>
+            <div>›</div>
+        </div>
+
+        <div class="category-item">
+            <div class="category-left">
+                <div class="category-icon">🛡️</div>
+                <div>保險</div>
+            </div>
+            <div>›</div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- 保固 -->
+
+<section id="warranty" class="page">
+
+    <h1 class="page-title">保固</h1>
+    <p class="page-subtitle">查看商品保固剩餘時間</p>
+
+    <div id="warrantyList" class="item-list"></div>
+
+</section>
+
+
+<!-- 到期 -->
+
+<section id="expiry" class="page">
+
+    <h1 class="page-title">即將到期</h1>
+    <p class="page-subtitle">重要期限提醒</p>
+
+    <div id="expiryList" class="item-list"></div>
+
+</section>
+
+
+<!-- 訂閱 -->
+
+<section id="subscriptions" class="page">
+
+    <h1 class="page-title">我的訂閱</h1>
+    <p class="page-subtitle">管理所有固定扣款</p>
+
+    <div class="empty">
+        <div class="empty-icon">💳</div>
+        <p>訂閱功能即將推出</p>
+    </div>
+
+</section>
+
+
+<!-- 維修 -->
+
+<section id="repairs" class="page">
+
+    <h1 class="page-title">維修紀錄</h1>
+    <p class="page-subtitle">查看所有物品的維修歷史</p>
+
+    <div class="empty">
+        <div class="empty-icon">🔧</div>
+        <p>目前沒有維修紀錄</p>
+    </div>
+
+</section>
+
+
+<!-- 花費 -->
+
+<section id="expenses" class="page">
+
+    <h1 class="page-title">我的花費</h1>
+    <p class="page-subtitle">掌握你的資產支出</p>
+
+    <div class="item-card">
+        <div class="item-brand">所有物品購買總額</div>
+        <div class="item-name" id="totalExpense">$0</div>
+    </div>
+
+    <br>
+
+    <div id="expenseList" class="item-list"></div>
+
+</section>
+
+
+<!-- 家庭 -->
+
+<section id="family" class="page">
+
+    <h1 class="page-title">家庭</h1>
+    <p class="page-subtitle">與家人共享生活資產</p>
+
+    <div class="empty">
+        <div class="empty-icon">👨‍👩‍👧‍👦</div>
+        <p>家庭功能即將推出</p>
+    </div>
+
+</section>
+
+
+<!-- 設定 -->
+
+<section id="settings" class="page">
+
+    <h1 class="page-title">設定</h1>
+    <p class="page-subtitle">LifeVault 設定</p>
+
+    <div class="category-list">
+
+        <div class="category-item">
+            <div class="category-left">
+                <div class="category-icon">👤</div>
+                <div>個人資料</div>
+            </div>
+            <div>›</div>
+        </div>
+
+        <div class="category-item">
+            <div class="category-left">
+                <div class="category-icon">🔔</div>
+                <div>通知設定</div>
+            </div>
+            <div>›</div>
+        </div>
+
+        <div class="category-item">
+            <div class="category-left">
+                <div class="category-icon">🔐</div>
+                <div>隱私與安全</div>
+            </div>
+            <div>›</div>
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+
+<!-- 新增按鈕 -->
+
+<button class="floating-btn" onclick="openModal()">
+    ＋
+</button>
+
+
+<!-- 底部導覽 -->
+
+<nav class="bottom-nav">
+
+    <button class="nav-btn active" onclick="showPage('home',this)">
+        <span>🏠</span>
+        首頁
+    </button>
+
+    <button class="nav-btn" onclick="showPage('items',this)">
+        <span>📦</span>
+        物品
+    </button>
+
+    <button class="nav-btn" onclick="openModal()">
+        <span>＋</span>
+        新增
+    </button>
+
+    <button class="nav-btn" onclick="showPage('expiry',this)">
+        <span>🔔</span>
+        提醒
+    </button>
+
+    <button class="nav-btn" onclick="showPage('settings',this)">
+        <span>⚙️</span>
+        設定
+    </button>
+
+</nav>
+
+
+<!-- 新增視窗 -->
+
+<div id="modal" class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-title">
+            新增物品
+        </div>
+
+        <div class="form-group">
+            <label>物品名稱 *</label>
+            <input id="itemName" placeholder="例如：iPhone 17 Pro">
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group">
+                <label>分類</label>
+
+                <select id="itemCategory">
+
+                    <option>電子產品</option>
+                    <option>交通工具</option>
+                    <option>家電</option>
+                    <option>家具</option>
+                    <option>衣物</option>
+                    <option>珠寶／精品</option>
+                    <option>運動用品</option>
+                    <option>樂器</option>
+                    <option>收藏品</option>
+                    <option>寵物用品</option>
+                    <option>其他物品</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+                <label>品牌</label>
+                <input id="itemBrand" placeholder="Apple">
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label>型號</label>
+            <input id="itemModel" placeholder="例如：A3294">
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group">
+                <label>購買日期</label>
+                <input id="purchaseDate" type="date">
+            </div>
+
+            <div class="form-group">
+                <label>購買價格</label>
+                <input id="purchasePrice" type="number" min="0">
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label>購買地點</label>
+            <input id="purchaseLocation" placeholder="例如：Apple Store">
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group">
+                <label>保固開始日</label>
+                <input id="warrantyStart" type="date">
+            </div>
+
+            <div class="form-group">
+                <label>保固到期日</label>
+                <input id="warrantyEnd" type="date">
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label>備註</label>
+            <textarea id="itemNotes"></textarea>
+        </div>
+
+        <div class="modal-actions">
+
+            <button class="cancel-btn" onclick="closeModal()">
+                取消
+            </button>
+
+            <button class="save-btn" onclick="saveItem()">
+                儲存
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+let items =
+    JSON.parse(localStorage.getItem("lifevault_items")) || [];
+
+
+function showPage(pageId, button) {
+
+    document.querySelectorAll(".page")
+        .forEach(p => p.classList.remove("active"));
+
+    document.getElementById(pageId)
+        .classList.add("active");
+
+    document.querySelectorAll(".nav-btn")
+        .forEach(b => b.classList.remove("active"));
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+    if (pageId === "items") renderItems();
+    if (pageId === "warranty") renderWarranty();
+    if (pageId === "expiry") renderExpiry();
+    if (pageId === "expenses") renderExpenses();
+
+    window.scrollTo(0,0);
+}
+
+
+function openModal() {
+
+    document.getElementById("modal")
+        .classList.add("active");
+
+}
+
+
+function closeModal() {
+
+    document.getElementById("modal")
+        .classList.remove("active");
+
+}
+
+
+function saveItem() {
+
+    const name =
+        document.getElementById("itemName").value.trim();
+
+    if (!name) {
+
+        showToast("請輸入物品名稱");
+
+        return;
+    }
+
+
+    const item = {
+
+        id: Date.now(),
+
+        name,
+
+        category:
+            document.getElementById("itemCategory").value,
+
+        brand:
+            document.getElementById("itemBrand").value,
+
+        model:
+            document.getElementById("itemModel").value,
+
+        purchaseDate:
+            document.getElementById("purchaseDate").value,
+
+        purchasePrice:
+            Number(
+                document.getElementById("purchasePrice").value
+            ) || 0,
+
+        purchaseLocation:
+            document.getElementById("purchaseLocation").value,
+
+        warrantyStart:
+            document.getElementById("warrantyStart").value,
+
+        warrantyEnd:
+            document.getElementById("warrantyEnd").value,
+
+        notes:
+            document.getElementById("itemNotes").value
+
+    };
+
+
+    items.push(item);
+
+
+    localStorage.setItem(
+        "lifevault_items",
+        JSON.stringify(items)
+    );
+
+
+    clearForm();
+
+    closeModal();
+
+    renderItems();
+
+    updateDashboard();
+
+    showToast("物品已新增");
+
+}
+
+
+function clearForm() {
+
+    document.querySelectorAll("#modal input, #modal textarea")
+        .forEach(input => input.value = "");
+
+}
+
+
+function clearSearch() {
+
+    document.getElementById("searchInput").value = "";
+
+    renderItems();
+
+}
+
+
+function renderItems() {
+
+    const list =
+        document.getElementById("itemsList");
+
+    const keyword =
+        document.getElementById("searchInput")
+        ?.value
+        .toLowerCase()
+        .trim() || "";
+
+
+    const filtered =
+        items.filter(item => {
+
+            const text =
+                `${item.name} ${item.brand} ${item.model} ${item.category}`
+                .toLowerCase();
+
+            return text.includes(keyword);
+
+        });
+
+
+    if (!filtered.length) {
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    📦
+                </div>
+
+                <p>
+                    ${
+                        keyword
+                        ? "找不到符合的物品"
+                        : "目前還沒有物品"
+                    }
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML =
+        filtered.map(item => createItemHTML(item)).join("");
+
+}
+
+
+function createItemHTML(item) {
+
+    const warranty =
+        getWarranty(item.warrantyEnd);
+
+
+    return `
+
+        <div class="item-card">
+
+            <div class="item-header">
+
+                <div>
+
+                    <div class="item-name">
+                        ${escapeHTML(item.name)}
+                    </div>
+
+                    <div class="item-brand">
+                        ${escapeHTML(item.brand || "未設定品牌")}
+                        ${item.model ? " · " + escapeHTML(item.model) : ""}
+                    </div>
+
+                </div>
+
+                <div class="item-price">
+
+                    ${
+                        item.purchasePrice
+                        ? "$" + item.purchasePrice.toLocaleString()
+                        : ""
+                    }
+
+                </div>
+
+            </div>
+
+
+            <div class="item-info">
+
+                <div class="tag">
+                    ${escapeHTML(item.category)}
+                </div>
+
+                ${
+                    warranty
+                    ? `<div class="tag ${warranty.className}">
+                        🧾 ${warranty.text}
+                       </div>`
+                    : ""
+                }
+
+            </div>
+
+
+            <div class="item-actions">
+
+                <button
+                    class="small-btn primary"
+                    onclick="viewItem(${item.id})">
+
+                    查看
+
+                </button>
+
+                <button
+                    class="small-btn"
+                    onclick="deleteItem(${item.id})">
+
+                    刪除
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+function viewItem(id) {
+
+    const item =
+        items.find(i => i.id === id);
+
+    if (!item) return;
+
+
+    alert(
+
+`物品：${item.name}
+
+分類：${item.category}
+
+品牌：${item.brand || "未設定"}
+
+型號：${item.model || "未設定"}
+
+購買日期：${item.purchaseDate || "未設定"}
+
+購買價格：$${item.purchasePrice.toLocaleString()}
+
+購買地點：${item.purchaseLocation || "未設定"}
+
+保固到期：${item.warrantyEnd || "未設定"}
+
+備註：${item.notes || "無"}`
+    );
+
+}
+
+
+function deleteItem(id) {
+
+    const item =
+        items.find(i => i.id === id);
+
+    if (!item) return;
+
+
+    if (!confirm(`確定刪除「${item.name}」嗎？`)) {
+        return;
+    }
+
+
+    items =
+        items.filter(i => i.id !== id);
+
+
+    localStorage.setItem(
+        "lifevault_items",
+        JSON.stringify(items)
+    );
+
+
+    renderItems();
+
+    updateDashboard();
+
+    showToast("已刪除");
+
+}
+
+
+function getWarranty(date) {
+
+    if (!date) return null;
+
+
+    const end =
+        new Date(date + "T23:59:59");
+
+    const now =
+        new Date();
+
+    const days =
+        Math.ceil(
+            (end - now) /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    if (days < 0) {
+
+        return {
+            text: "已過保",
+            className: "danger"
+        };
+
+    }
+
+
+    if (days <= 7) {
+
+        return {
+            text: `剩 ${days} 天`,
+            className: "danger"
+        };
+
+    }
+
+
+    if (days <= 30) {
+
+        return {
+            text: `剩 ${days} 天`,
+            className: "warning"
+        };
+
+    }
+
+
+    return {
+        text: `剩 ${days} 天`,
+        className: ""
+    };
+
+}
+
+
+function renderWarranty() {
+
+    const list =
+        document.getElementById("warrantyList");
+
+
+    const data =
+        items.filter(i => i.warrantyEnd);
+
+
+    if (!data.length) {
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">🧾</div>
+
+                <p>目前沒有保固資料</p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        data.map(i => createItemHTML(i)).join("");
+
+}
+
+
+function renderExpiry() {
+
+    const list =
+        document.getElementById("expiryList");
+
+
+    const data =
+        items.filter(i => {
+
+            const warranty =
+                getWarranty(i.warrantyEnd);
+
+            return warranty &&
+                warranty.className;
+
+        });
+
+
+    if (!data.length) {
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">🎉</div>
+
+                <p>目前沒有即將到期項目</p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        data.map(i => createItemHTML(i)).join("");
+
+}
+
+
+function renderExpenses() {
+
+    const total =
+        items.reduce(
+            (sum,item) =>
+                sum + Number(item.purchasePrice || 0),
+            0
+        );
+
+
+    document.getElementById("totalExpense")
+        .textContent =
+            "$" + total.toLocaleString();
+
+
+    const list =
+        document.getElementById("expenseList");
+
+
+    list.innerHTML =
+        items
+        .filter(i => i.purchasePrice > 0)
+        .map(i => `
+
+            <div class="item-card">
+
+                <div class="item-header">
+
+                    <div class="item-name">
+                        ${escapeHTML(i.name)}
+                    </div>
+
+                    <div class="item-price">
+                        $${i.purchasePrice.toLocaleString()}
+                    </div>
+
+                </div>
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+function updateDashboard() {
+
+    document.getElementById("itemCount")
+        .textContent =
+            `${items.length} 件`;
+
+
+    document.getElementById("warrantyCount")
+        .textContent =
+            `${items.filter(i => i.warrantyEnd).length} 項`;
+
+
+    document.getElementById("expiryCount")
+        .textContent =
+            `${items.filter(i => {
+
+                const w = getWarranty(i.warrantyEnd);
+
+                return w && w.className;
+
+            }).length} 項`;
+
+
+    const total =
+        items.reduce(
+            (sum,item) =>
+                sum + Number(item.purchasePrice || 0),
+            0
+        );
+
+
+    document.getElementById("expenseCount")
+        .textContent =
+            "$" + total.toLocaleString();
+
+}
+
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    }, 2000);
+
+}
+
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* PWA */
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", () => {
+
+        navigator.serviceWorker
+            .register("./service-worker.js")
+            .catch(error => {
+                console.log("Service Worker Error:", error);
+            });
+
+    });
+
+}
+
+
+updateDashboard();
+renderItems();
+
+</script>
+
+</body>
+</html>
